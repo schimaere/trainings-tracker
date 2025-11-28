@@ -10,7 +10,7 @@ const nutritionGoalsSchema = z.object({
   fat_g: z.number().min(0).optional(),
 });
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getSession();
     if (!session?.user?.id) {
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result[0], { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.errors }, { status: 400 });
+      return NextResponse.json({ error: error.issues }, { status: 400 });
     }
     console.error("Error creating/updating nutrition goals:", error);
     return NextResponse.json(
