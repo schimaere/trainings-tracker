@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       ? new Date(validated.recorded_at)
       : new Date();
 
-    const result = await sql`
+    const result = (await sql`
       INSERT INTO body_metrics (user_id, weight_kg, body_fat_percentage, recorded_at)
       VALUES (
         ${session.user.id},
@@ -62,7 +62,13 @@ export async function POST(request: NextRequest) {
         ${recordedAt.toISOString()}
       )
       RETURNING id, weight_kg, body_fat_percentage, recorded_at, created_at
-    `;
+    `) as Array<{
+      id: string;
+      weight_kg: number | null;
+      body_fat_percentage: number | null;
+      recorded_at: string;
+      created_at: string;
+    }>;
 
     return NextResponse.json(result[0], { status: 201 });
   } catch (error) {
@@ -76,4 +82,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

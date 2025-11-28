@@ -21,7 +21,14 @@ export async function GET() {
       SELECT id, calories, protein_g, carbs_g, fat_g, updated_at
       FROM nutrition_goals
       WHERE user_id = ${session.user.id}
-    `;
+    ` as Array<{
+      id: string;
+      calories: number;
+      protein_g: number;
+      carbs_g: number;
+      fat_g: number;
+      updated_at: string;
+    }>;
 
     if (goals.length === 0) {
       // Return default goals if none exist
@@ -74,7 +81,14 @@ export async function POST(request: NextRequest) {
         fat_g = EXCLUDED.fat_g,
         updated_at = CURRENT_TIMESTAMP
       RETURNING id, calories, protein_g, carbs_g, fat_g, updated_at
-    `;
+    ` as Array<{
+      id: string;
+      calories: number;
+      protein_g: number;
+      carbs_g: number;
+      fat_g: number;
+      updated_at: string;
+    }>;
 
     return NextResponse.json(result[0], { status: 201 });
   } catch (error) {
