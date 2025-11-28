@@ -10,12 +10,19 @@ function getSql() {
   return neon(process.env.DATABASE_URL);
 }
 
+// Validate required environment variables
+if (!process.env.AUTH_SECRET && !process.env.NEXTAUTH_SECRET) {
+  console.warn(
+    "Warning: AUTH_SECRET or NEXTAUTH_SECRET is not set. NextAuth may not work correctly."
+  );
+}
+
 export const authOptions: NextAuthOptions = {
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
   callbacks: {

@@ -15,6 +15,7 @@ export default withAuth(
       return NextResponse.next();
     } catch (error) {
       console.error("Middleware error:", error);
+      // On error, allow the request to proceed
       return NextResponse.next();
     }
   },
