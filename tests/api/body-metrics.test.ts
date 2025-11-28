@@ -35,7 +35,7 @@ describe('Body Metrics API Route', () => {
 
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
       const mockMetrics = [
         {
@@ -47,7 +47,13 @@ describe('Body Metrics API Route', () => {
         },
       ];
 
-      vi.mocked(sql).mockResolvedValue(mockMetrics as any);
+      vi.mocked(sql).mockResolvedValue(mockMetrics as Array<{
+        id: string;
+        weight_kg: number;
+        body_fat_percentage: number;
+        recorded_at: string;
+        created_at: string;
+      }>);
 
       const request = new NextRequest('http://localhost:3000/api/body-metrics');
       const response = await GET(request);
@@ -64,9 +70,15 @@ describe('Body Metrics API Route', () => {
 
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
-      vi.mocked(sql).mockResolvedValue([] as any);
+      vi.mocked(sql).mockResolvedValue([] as Array<{
+        id: string;
+        weight_kg: number | null;
+        body_fat_percentage: number | null;
+        recorded_at: string;
+        created_at: string;
+      }>);
 
       const request = new NextRequest('http://localhost:3000/api/body-metrics?limit=10&offset=5');
       await GET(request);
@@ -101,7 +113,7 @@ describe('Body Metrics API Route', () => {
 
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
       const mockResult = [
         {
@@ -113,7 +125,13 @@ describe('Body Metrics API Route', () => {
         },
       ];
 
-      vi.mocked(sql).mockResolvedValue(mockResult as any);
+      vi.mocked(sql).mockResolvedValue(mockResult as Array<{
+        id: string;
+        weight_kg: number;
+        body_fat_percentage: number;
+        recorded_at: string;
+        created_at: string;
+      }>);
 
       const request = new NextRequest('http://localhost:3000/api/body-metrics', {
         method: 'POST',
@@ -135,7 +153,7 @@ describe('Body Metrics API Route', () => {
       const { getSession } = await import('@/lib/auth');
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
       const request = new NextRequest('http://localhost:3000/api/body-metrics', {
         method: 'POST',
@@ -158,7 +176,7 @@ describe('Body Metrics API Route', () => {
 
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
       const mockResult = [
         {
@@ -170,7 +188,13 @@ describe('Body Metrics API Route', () => {
         },
       ];
 
-      vi.mocked(sql).mockResolvedValue(mockResult as any);
+      vi.mocked(sql).mockResolvedValue(mockResult as Array<{
+        id: string;
+        weight_kg: number;
+        body_fat_percentage: number;
+        recorded_at: string;
+        created_at: string;
+      }>);
 
       const request = new NextRequest('http://localhost:3000/api/body-metrics', {
         method: 'POST',
