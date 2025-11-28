@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   description: "Track your fitness and nutrition journey",
   manifest: "/manifest.json",
   themeColor: "#3b82f6",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
