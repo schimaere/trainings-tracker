@@ -18,17 +18,17 @@ function getSql() {
 
 // Create a Proxy that lazily initializes the connection
 // The neon() function returns a template tag function, so we need to proxy it correctly
-export const sql = new Proxy(function() {} as ReturnType<typeof neon>, {
-  apply(_target, _thisArg, argumentsList) {
+export const sql = new Proxy(function() {} as unknown as ReturnType<typeof neon>, {
+  apply(_target, _thisArg, argumentsList: unknown[]) {
     // Handle template tag function calls: sql`SELECT ...`
     // Template tag functions receive (strings, ...values) as arguments
     const instance = getSql();
-    return (instance as any)(...argumentsList);
+    return (instance as (...args: unknown[]) => unknown)(...argumentsList);
   },
-  get(_target, prop) {
+  get(_target, prop: string | symbol) {
     // Handle property access (though neon instances typically don't have properties)
     const instance = getSql();
-    return (instance as any)[prop];
+    return (instance as unknown as Record<string | symbol, unknown>)[prop];
   },
-});
+}) as ReturnType<typeof neon>;
 

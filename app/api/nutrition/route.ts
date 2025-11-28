@@ -66,14 +66,24 @@ export async function GET(request: NextRequest) {
       FROM food_entries
       WHERE user_id = ${session.user.id}
         ${date ? sql`AND DATE(consumed_at) = DATE(${date})` : sql``}
-    `;
+    ` as Array<{
+      total_calories: number;
+      total_protein: number;
+      total_carbs: number;
+      total_fat: number;
+    }>;
 
     // Fetch user's nutrition goals
     const goals = await sql`
       SELECT calories, protein_g, carbs_g, fat_g
       FROM nutrition_goals
       WHERE user_id = ${session.user.id}
-    `;
+    ` as Array<{
+      calories: number;
+      protein_g: number;
+      carbs_g: number;
+      fat_g: number;
+    }>;
 
     const defaultGoals = {
       calories: 2000,
@@ -128,7 +138,18 @@ export async function POST(request: NextRequest) {
         ${consumedAt.toISOString()}
       )
       RETURNING id, food_name, calories, protein_g, carbs_g, fat_g, quantity, unit, consumed_at, created_at
-    `;
+    ` as Array<{
+      id: string;
+      food_name: string;
+      calories: number;
+      protein_g: number;
+      carbs_g: number;
+      fat_g: number;
+      quantity: number;
+      unit: string;
+      consumed_at: string;
+      created_at: string;
+    }>;
 
     return NextResponse.json(result[0], { status: 201 });
   } catch (error) {
