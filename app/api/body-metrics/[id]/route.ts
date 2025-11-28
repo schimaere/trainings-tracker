@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getSession();
@@ -12,9 +12,11 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
+
     await sql`
       DELETE FROM body_metrics
-      WHERE id = ${params.id} AND user_id = ${session.user.id}
+      WHERE id = ${id} AND user_id = ${session.user.id}
     `;
 
     return NextResponse.json({ success: true });
