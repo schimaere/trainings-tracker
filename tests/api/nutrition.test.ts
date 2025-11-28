@@ -35,7 +35,7 @@ describe('Nutrition API Route', () => {
 
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
       const mockEntries = [
         {
@@ -75,10 +75,31 @@ describe('Nutrition API Route', () => {
       let callCount = 0;
       vi.mocked(sql).mockImplementation(async () => {
         callCount++;
-        if (callCount === 1) return mockEntries as any;
-        if (callCount === 2) return mockTotals as any;
-        if (callCount === 3) return mockGoals as any;
-        return [] as any;
+        if (callCount === 1) return mockEntries as Array<{
+          id: string;
+          food_name: string;
+          calories: number;
+          protein_g: number;
+          carbs_g: number;
+          fat_g: number;
+          quantity: number;
+          unit: string;
+          consumed_at: string;
+          created_at: string;
+        }>;
+        if (callCount === 2) return mockTotals as Array<{
+          total_calories: number;
+          total_protein: number;
+          total_carbs: number;
+          total_fat: number;
+        }>;
+        if (callCount === 3) return mockGoals as Array<{
+          calories: number;
+          protein_g: number;
+          carbs_g: number;
+          fat_g: number;
+        }>;
+        return [] as unknown[];
       });
 
       const request = new NextRequest('http://localhost:3000/api/nutrition');
@@ -97,15 +118,36 @@ describe('Nutrition API Route', () => {
 
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
       let callCount = 0;
       vi.mocked(sql).mockImplementation(async () => {
         callCount++;
-        if (callCount === 1) return [] as any;
-        if (callCount === 2) return [{ total_calories: 0, total_protein: 0, total_carbs: 0, total_fat: 0 }] as any;
-        if (callCount === 3) return [{ calories: 2000, protein_g: 150, carbs_g: 200, fat_g: 65 }] as any;
-        return [] as any;
+        if (callCount === 1) return [] as Array<{
+          id: string;
+          food_name: string;
+          calories: number;
+          protein_g: number;
+          carbs_g: number;
+          fat_g: number;
+          quantity: number;
+          unit: string;
+          consumed_at: string;
+          created_at: string;
+        }>;
+        if (callCount === 2) return [{ total_calories: 0, total_protein: 0, total_carbs: 0, total_fat: 0 }] as Array<{
+          total_calories: number;
+          total_protein: number;
+          total_carbs: number;
+          total_fat: number;
+        }>;
+        if (callCount === 3) return [{ calories: 2000, protein_g: 150, carbs_g: 200, fat_g: 65 }] as Array<{
+          calories: number;
+          protein_g: number;
+          carbs_g: number;
+          fat_g: number;
+        }>;
+        return [] as unknown[];
       });
 
       const request = new NextRequest('http://localhost:3000/api/nutrition?date=2024-01-01');
@@ -142,7 +184,7 @@ describe('Nutrition API Route', () => {
 
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
       const mockResult = [
         {
@@ -159,7 +201,18 @@ describe('Nutrition API Route', () => {
         },
       ];
 
-      vi.mocked(sql).mockResolvedValue(mockResult as any);
+      vi.mocked(sql).mockResolvedValue(mockResult as Array<{
+        id: string;
+        food_name: string;
+        calories: number;
+        protein_g: number;
+        carbs_g: number;
+        fat_g: number;
+        quantity: number;
+        unit: string;
+        consumed_at: string;
+        created_at: string;
+      }>);
 
       const request = new NextRequest('http://localhost:3000/api/nutrition', {
         method: 'POST',
@@ -184,7 +237,7 @@ describe('Nutrition API Route', () => {
       const { getSession } = await import('@/lib/auth');
       vi.mocked(getSession).mockResolvedValue({
         user: { id: 'user-123', email: 'test@example.com' },
-      } as any);
+      } as { user: { id: string; email: string } });
 
       const request = new NextRequest('http://localhost:3000/api/nutrition', {
         method: 'POST',

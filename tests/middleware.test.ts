@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { NextRequest } from 'next/server';
 
 // Mock next-auth/middleware
-const mockWithAuth = vi.fn((middlewareFn, options) => {
+const mockWithAuth = vi.fn((middlewareFn: unknown) => {
   return middlewareFn;
 });
 
@@ -66,19 +65,19 @@ describe('Middleware', () => {
       // Test with token
       const reqWithToken = {
         nextUrl: { pathname: '/dashboard' },
-      } as any;
+      } as { nextUrl: { pathname: string } };
       expect(authorizedCallback({ token: { sub: '123' }, req: reqWithToken })).toBe(true);
 
       // Test without token on auth page
       const reqAuthPage = {
         nextUrl: { pathname: '/auth/signin' },
-      } as any;
+      } as { nextUrl: { pathname: string } };
       expect(authorizedCallback({ token: null, req: reqAuthPage })).toBe(true);
 
       // Test without token on protected page
       const reqProtected = {
         nextUrl: { pathname: '/dashboard' },
-      } as any;
+      } as { nextUrl: { pathname: string } };
       expect(authorizedCallback({ token: null, req: reqProtected })).toBe(false);
     }
   });
@@ -94,7 +93,7 @@ describe('Middleware', () => {
       // Mock a request that might cause an error
       const reqError = {
         nextUrl: { pathname: '/auth/signin' },
-      } as any;
+      } as { nextUrl: { pathname: string } };
 
       // Should return true for auth pages even on error
       const result = authorizedCallback({ token: null, req: reqError });
